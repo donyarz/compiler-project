@@ -1,0 +1,75 @@
+1. program -> declaration_list
+2. declaration_list -> declaration_list declaration | declaration
+3. declaration -> var_declaration | fun_declaration
+4. var_declaration -> type_specifier #pid ID ; #declare | type_specifier #pid ID [ NUM ] ; #array_declare
+5. type_specifier -> int | void
+6. fun_declaration -> type_specifier #pid ID ( params ) compound_stmt
+7. params -> param_list | void
+8. param_list -> param_list , param | param
+9. param -> type_specifier #pid ID | type_specifier #pid ID [ ]
+10. compound_stmt -> #add_scope { local_declarations statement_list } #reduce_scope
+11. local_declarations -> local_declarations var_declaration | Epsilon
+12. statement_list -> statement_list statement | Epsilon
+13. statement -> expression_stmt | compound_stmt | selection_stmt | iteration_stmt | return_stmt | switch_stmt | output_stmt
+14. expression_stmt -> expression ; #mark_assignment | break ; #break | ;
+15. selection_stmt -> if ( expression ) #save statement endif #jpf| if ( expression ) #save statement else #jpf_save statement #jp endif
+16. iteration_stmt -> #jmp_save while #label ( expression ) #save statement #while
+17. return_stmt -> return ; | return expression ;
+18. switch_stmt -> #jmp_save switch ( expression ) #add_scope { case #eq_switch #num : #save statement_list case_stmts default_stmt } #switch_Jmp | #jmp_save switch ( expression ) #add_scope { default : statement_list } #switch_Jmp
+19. case_stmts -> case_stmts case_stmt | Epsilon
+20. case_stmt -> #jpf case #num #eq_switch : #save statement_list
+21. default_stmt -> #jpf default : statement_list | Epsilon
+22. expression -> var = expression #assign | simple_expression
+23. var -> #pid ID | #pid ID [ expression ] #array_access
+24. simple_expression -> additive_expression lt additive_expression #lt | additive_expression eq additive_expression #eq| additive_expression
+25. lt -> <
+26. eq -> ==
+27. additive_expression -> additive_expression addop term #add | additive_expression subop term #sub | term
+28. addop -> +
+29. subop -> -
+30. output_stmt -> output(simple_expression);#print
+31. term -> term mulop factor #mult |term divop factor #div| factor
+32. mulop -> *
+33. divop -> /
+34. factor -> ( expression ) | var | call | #num
+35. call -> #pID ID ( args )
+36. args -> arg_list | Epsilon
+37. arg_list -> arg_list , expression | expression
+38. #pID -> Epsilon
+39. #assign -> Epsilon
+40. #add -> Epsilon
+41. #sub -> Epsilon
+42. #mult -> Epsilon
+43. #div -> Epsilon
+44. #while -> Epsilon
+45. #label -> Epsilon
+46. #save -> Epsilon
+47. #jpf -> Epsilon
+48. #jp -> Epsilon
+49. #jpf_save -> Epsilon
+50. #print -> Epsilon
+51. $lt -> Epsilon
+52. #eq -> Epsilon
+53. #declare -> Epsilon
+54. #num -> #save_constant NUM
+55. #save_constant -> Epsilon
+56. #array_declare -> Epsilon
+57. #array_access -> Epsilon
+58. #jmp_save -> Epsilon
+59. #eq_switch -> Epsilon
+60. #break -> Epsilon
+61. #switch_Jmp -> Epsilon
+62. #add_scope -> Epsilon
+63. #reduce_scope -> Epsilon
+
+Keywords: else if int return void while switch case default break endif
+
+Special symbols: + - * / < == = : ; , ( ) [ ] { } /* */ //
+
+ID = letter letter*
+NUM = digit digit*
+letter = a | .. | z | A | .. | Z
+digit = 0 | .. | 9
+
+Comments: /* ... */
+
